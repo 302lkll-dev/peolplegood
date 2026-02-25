@@ -3,77 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>충청남도의원 예비후보 전성일</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        body { background-color: #f8f9fa; font-family: 'Pretendard', sans-serif; }
-        .navbar { background-color: #ffffff; border-bottom: 2px solid #0056b3; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .navbar-brand { font-weight: 800; color: #0056b3 !important; display: flex; align-items: center; }
-        .logo-img { height: 45px; margin-right: 12px; }
-        .card { border: none; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .btn-primary { background-color: #0056b3; border: none; padding: 12px; font-weight: bold; }
-        .entry-card { border-left: 6px solid #0056b3; transition: 0.3s; }
-        .entry-card:hover { transform: translateY(-3px); }
-        .badge-loc { background-color: #e7f1ff; color: #0056b3; font-weight: 600; }
+        body { background-color: #f0f2f5; font-family: 'Pretendard', sans-serif; color: #333; }
+        .navbar { background-color: #ffffff; border-bottom: 3px solid #0056b3; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: 800; color: #0056b3 !important; }
+        .logo-img { height: 40px; margin-right: 10px; }
+        
+        /* 탭 디자인 */
+        .nav-pills .nav-link { color: #555; font-weight: 600; border-radius: 10px; padding: 12px 20px; }
+        .nav-pills .nav-link.active { background-color: #0056b3; color: white; }
+        
+        .card { border: none; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; }
+        .btn-primary { background-color: #0056b3; border: none; padding: 15px; font-weight: bold; border-radius: 12px; }
+        
+        /* 활동일지 전용 스타일 */
+        .log-card { border-left: 5px solid #ffc107; background: white; margin-bottom: 20px; }
+        .log-date { color: #0056b3; font-weight: bold; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <nav class="navbar sticky-top mb-4 p-2">
-        <div class="container">
+        <div class="container d-flex justify-content-center">
             <a class="navbar-brand" href="/">
                 <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo-img">
-                <span>{{ title }}</span>
+                <span>전성일의 동네 한바퀴</span>
             </a>
         </div>
     </nav>
 
-    <div class="container" style="max-width: 700px;">
-        <div class="card mb-5">
-            <div class="card-body p-4">
-                <h5 class="fw-bold mb-4 text-center">📢 {{ subtitle }}</h5>
-                <form action="/add" method="POST">
-                    <div class="row g-2 mb-3">
-                        <div class="col-6">
-                            <input type="text" name="name" class="form-control form-control-lg" placeholder="성함" required>
-                        </div>
-                        <div class="col-6">
-                            <input type="text" name="location" class="form-control form-control-lg" placeholder="거주지 (예: 용화동)">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <textarea name="content" class="form-control form-control-lg" rows="4" placeholder="동네의 불편한 점이나 전성일 후보에게 바라는 점을 자유롭게 적어주세요 응원에 메세지도 가능합니다." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100 shadow-sm">의견 보내기</button>
-                </form>
-            </div>
-        </div>
+    <div class="container" style="max-width: 600px;">
+        <ul class="nav nav-pills nav-fill mb-4 bg-white p-2 shadow-sm" style="border-radius: 15px;">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="pill" href="#tab-complaint"><i class="bi bi-megaphone"></i> 민원/응원</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="pill" href="#tab-diary"><i class="bi bi-journal-check"></i> 활동일지</a>
+            </li>
+        </ul>
 
-        <div class="entries-list">
-            {% for entry in entries %}
-            <div class="card entry-card mb-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div>
-                            <span class="fw-bold"><i class="bi bi-person-circle"></i> {{ entry.name }} 님</span>
-                            {% if entry.location %}
-                            <span class="badge badge-loc ms-2">📍 {{ entry.location }}</span>
-                            {% endif %}
-                        </div>
-                        <span class="text-muted small">{{ entry.date_posted.strftime('%Y.%m.%d') }}</span>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-complaint">
+                <div class="card mb-4">
+                    <div class="card-body p-4">
+                        <h6 class="fw-bold mb-3 text-primary"><i class="bi bi-pencil-square"></i> 의견을 남겨주세요</h6>
+                        <form action="/add" method="POST">
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <input type="text" name="name" class="form-control" placeholder="성함" required>
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" name="location" class="form-control" placeholder="거주지 (예: 용화동)">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="content" class="form-control" rows="4" placeholder="불편하신 점이나 전성일 후보에게 보내는 따뜻한 응원을 적어주세요." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 shadow">의견 전달 및 응원하기</button>
+                        </form>
                     </div>
-                    <p class="card-text text-dark pt-2">{{ entry.content }}</p>
+                </div>
+
+                <div class="entries-list">
+                    {% for entry in entries %}
+                    <div class="card mb-3 p-3">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                            <div>
+                                <span class="fw-bold">{{ entry.name }} 님</span>
+                                {% if entry.location %}<span class="badge bg-light text-primary ms-1">📍 {{ entry.location }}</span>{% endif %}
+                            </div>
+                            <small class="text-muted">{{ entry.date_posted.strftime('%Y.%m.%d') }}</small>
+                        </div>
+                        <p class="mb-0 text-dark">{{ entry.content }}</p>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
-            {% endfor %}
+
+            <div class="tab-pane fade" id="tab-diary">
+                <div class="alert alert-info border-0 shadow-sm" style="border-radius: 15px;">
+                    <i class="bi bi-info-circle"></i> 전성일 후보의 발로 뛰는 활동 기록입니다.
+                </div>
+                
+                <div class="card log-card shadow-sm">
+                    <div class="card-body">
+                        <span class="log-date">2024.03.20</span>
+                        <h6 class="fw-bold mt-1">용화동 상가 번영회 간담회 참석</h6>
+                        <p class="small text-muted mb-0">지역 상권 활성화를 위한 주차난 해결 방안을 논의했습니다. 주민들의 목소리를 정책에 꼭 반영하겠습니다.</p>
+                    </div>
+                </div>
+
+                <div class="card log-card shadow-sm">
+                    <div class="card-body">
+                        <span class="log-date">2024.03.18</span>
+                        <h6 class="fw-bold mt-1">동네 환경 정화 활동</h6>
+                        <p class="small text-muted mb-0">이른 아침, 주민분들과 함께 용화동 일대 청소를 진행했습니다. 깨끗한 우리 동네를 위해 계속 뛰겠습니다.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <footer class="text-center py-5 text-muted small">
-        &copy; 2026 {{ title }}. <br>여러분의 소중한 의견을 정책에 담겠습니다.
+        &copy; 2026 충청남도의원 예비후보 전성일 <br>여러분의 목소리가 전성일의 공약이 됩니다.
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 
